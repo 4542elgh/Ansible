@@ -4,6 +4,7 @@
     name: binary_exists
   vars:
     binary_name: "discord" # Result will store in "zfs_exists"
+  register: "discord_stat"
   
 - name: "Install Discord"
   block:
@@ -14,13 +15,14 @@
   - name: Install Discord package
     apt:
       deb: /tmp/discord.deb
-  when: not discord_exists
+  when: not discord_stat.exists
 
 - name: "Check MPV exists"
   include_role:
     name: binary_exists
   vars:
     binary_name: "mpv" # Result will store in "zfs_exists"
+  register: "mpv_stat"
 
 - name: "Install MPV"
   block:
@@ -31,4 +33,4 @@
     apt:
       name: mpv
       update_cache: yes
-  when: not mpv_exists
+  when: not mpv_stat.exists

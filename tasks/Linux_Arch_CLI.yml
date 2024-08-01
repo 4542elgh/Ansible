@@ -1,7 +1,7 @@
 ---
 - name: "Install pacman packages"
   pacman:
-    name: "{{pacman_cli_packages}}"
+    name: pacman_cli_packages
     state: present
   become: true
 
@@ -11,7 +11,7 @@
 
 - name: "Install yay packages"
   yay:
-    name: "{{yay_cli_packages}}"
+    name: yay_cli_packages
     state: present
 
 - name: "Generate man pages"
@@ -22,5 +22,5 @@
     name: "{{item}}"
     state: started
     enabled: true
-  loop: "{{start_services}}"
+  loop: start_services
 

@@ -1,22 +1,27 @@
 ---
-  - name: "Make a backup of proxmoxlib.js"
-    ansible.builtin.copy:
-      src: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
-      dest: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js.backup
-      owner: root
-      group: root
-      mode: '0755'
-    become: true
+  - name: "Check if bakcup file exists"
+    stat:
+      path: /etc/file.txt
+    register: backup_stat
 
-  - name: "Removing non-prod warning prompt"
-    ansible.builtin.shell: sed -i 's/if (res === null || res === undefined || !res || res/if (false){/g' /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
-    become: true
+  - name: "Proceed with removing subscription trial"
+    block:
+    - name: "Make a backup of proxmoxlib.js"
+      copy:
+        src: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+        dest: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js.backup
+        owner: root
+        group: root
+        mode: '0755'
 
-  - name: "Removing non-prod warning prompt"
-    ansible.builtin.shell:  sed -i "s/\.data\.status\.toLowerCase() !== 'active') {//g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
-    become: true
+    - name: "Removing non-prod warning prompt"
+      shell: sed -i 's/if (res === null || res === undefined || !res || res/if (false){/g' /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
 
-  - name: "Restart pveproxmox.service"
-    ansible.builtin.systemd:
-      name: pveproxy.service
-      state: reloaded
+    - name: "Removing non-prod warning prompt"
+      shell:  sed -i "s/\.data\.status\.toLowerCase() !== 'active') {//g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+
+    - name: "Restart pveproxmox.service"
+      systemd:
+        name: pveproxy.service
+        state: reloaded
+    when: not backup_stat.stat.exists

@@ -4,18 +4,21 @@
     name: binary_exists
   vars:
     binary_name: "yay"
+  register: yay_stat
 
-- name: "Check yay exists"
+- name: "Check git exists"
   include_role:
     name: binary_exists
   vars:
     binary_name: "git"
+  register: git_stat
 
-- name: "Check yay exists"
+- name: "Check makepkg exists"
   include_role:
     name: binary_exists
   vars:
     binary_name: "makepkg"
+  register: makepkg_stat
 
 - name: "Install yay"
   block:
@@ -35,4 +38,4 @@
       file:
         path: "/tmp/yay"
         state: absent
-  when: not yay_exists and git_exists and makepkg_exists
+  when: not yay_stat.exists and git_stat.exists and makepkg_stat.exists

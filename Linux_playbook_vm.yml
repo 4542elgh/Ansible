@@ -12,9 +12,17 @@
 - name: "Setup Debian based DE"
   hosts: linux_vm
   tasks:
-    - name: "Configure dotfiles"
-      include_role:
-        name: get_dotfiles
+    - name: "Set system identifier"
+      set_fact:
+        system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}"
+
+    - name: "Include vars"
+      include_vars:
+        file: "group_vars/{{system_identifier}}.yml"
+
+    - name: "Install CLI app based on OS"
+      include_tasks:
+        file: "tasks/{{system_identifier}}_CLI.yml"
 
     - name: "Install docker"
       include_role:
@@ -23,12 +31,16 @@
         binary_name: "docker"
         script_url: "https://get.docker.com"
 
-    - name: "Install antibody"
-      include_role:
-        name: url_install
-      vars:
-        binary_name: "antibody"
-        script_url: "https://git.io/antibody"
+    # - name: "Configure dotfiles"
+    #   include_role:
+    #     name: get_dotfiles
+
+    # - name: "Install antibody"
+    #   include_role:
+    #     name: url_install
+    #   vars:
+    #     binary_name: "antibody"
+    #     script_url: "https://git.io/antibody"
         
     # - name: "Install tailscale"
     #   include_role:

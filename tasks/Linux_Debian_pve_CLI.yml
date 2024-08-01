@@ -1,7 +1,7 @@
 ---
 - name: Install apt package
   apt:
-    name: "{{apt_cli_packages}}"
+    name: "{{ apt_cli_packages }}"
     update_cache: true
   become: true
 
@@ -9,5 +9,6 @@
   systemd:
     state: started
     enabled: true
-    name: sshd
+    name: "{{ item }}"
+  loop: start_services
   become: true
