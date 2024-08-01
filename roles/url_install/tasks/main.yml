@@ -3,6 +3,7 @@
   - name: "Check {{binary_name}} exists"
     include_role:
       name: binary_exists
+    register: binary_exists_stat
 
   - name: "Install {{binary_name}}"
     block:
@@ -26,4 +27,4 @@
       file:
         path: '/tmp/get-{{binary_name}}.sh'
         state: absent
-    when: not binary_exists_result.exists
+    when: not binary_exists_stat.exists
