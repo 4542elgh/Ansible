@@ -1,0 +1,38 @@
+---
+- name: "Check yay exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "yay"
+
+- name: "Check yay exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "git"
+
+- name: "Check yay exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "makepkg"
+
+- name: "Install yay"
+  block:
+    - name: "Get yay git"
+      git:
+        repo: "https://aur.archlinux.org/yay.git"
+        dest: "/tmp/yay"
+        version: "next"
+        update: "no"
+
+    - name: "Build yay"
+      shell: "makepkg --noconfirm -si"
+      args:
+        chdir: "/tmp/yay"
+
+    - name: "Delete /tmp/yay"
+      file:
+        path: "/tmp/yay"
+        state: absent
+  when: not yay_exists and git_exists and makepkg_exists

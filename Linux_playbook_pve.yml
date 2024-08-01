@@ -1,0 +1,29 @@
+---
+- name: "Rust for all"
+  hosts: all
+  tasks:
+  - name: "Install rust"
+    include_role:
+      name: url_install
+    vars:
+      binary_name: "rustup"
+      script_url: "https://sh.rustup.rs"
+
+- name: "Setup Debian based DE"
+  hosts: linux_pve
+  tasks:
+    - name: "Set system identifier"
+      set_fact:
+        system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}_{{ansible_facts.hostname}}"
+
+    - name: "Include vars"
+      include_vars:
+        file: "group_vars/{{system_identifier}}.yml"
+
+    - name: "Remove Proxmox Trial"
+      include_tasks:
+        file: "tasks/{{system_identifier}}/remove_proxmox_trial.yml"
+
+    - name: "Install CLI app based on OS"
+      include_tasks:
+        file: "tasks/{{system_identifier}}_CLI.yml"

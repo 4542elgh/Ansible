@@ -1,0 +1,22 @@
+---
+  - name: "Make a backup of proxmoxlib.js"
+    ansible.builtin.copy:
+      src: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+      dest: /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js.backup
+      owner: root
+      group: root
+      mode: '0755'
+    become: true
+
+  - name: "Removing non-prod warning prompt"
+    ansible.builtin.shell: sed -i 's/if (res === null || res === undefined || !res || res/if (false){/g' /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+    become: true
+
+  - name: "Removing non-prod warning prompt"
+    ansible.builtin.shell:  sed -i "s/\.data\.status\.toLowerCase() !== 'active') {//g" /usr/share/javascript/proxmox-widget-toolkit/proxmoxlib.js
+    become: true
+
+  - name: "Restart pveproxmox.service"
+    ansible.builtin.systemd:
+      name: pveproxy.service
+      state: reloaded

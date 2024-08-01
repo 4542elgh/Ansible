@@ -1,0 +1,82 @@
+# ======================================================================================================
+#    __________________   __  _______  ____  _   ______  ______________ __ ____  __  ______  ______  __
+#   / ____/ ____/_  __/  /  |/  / __ \/ __ \/ | / / __ \/ ____/ ____/ //_// __ )/ / / / __ \/ __ \ \/ /
+#  / / __/ __/   / /    / /|_/ / / / / / / /  |/ / / / / __/ / /   / ,<  / __  / / / / / / / / / /\  / 
+# / /_/ / /___  / /    / /  / / /_/ / /_/ / /|  / /_/ / /___/ /___/ /| |/ /_/ / /_/ / /_/ / /_/ / / /  
+# \____/_____/ /_/    /_/  /_/\____/\____/_/ |_/_____/_____/\____/_/ |_/_____/\____/_____/_____/ /_/   
+# ======================================================================================================
+---
+- name: "Delete {{package_name}}.7z"
+  ansible.windows.win_file:
+    path: "{{package_path}}.7z"
+    state: absent
+
+- name: "Check if {{package_name}} exists already"
+  ansible.windows.win_stat:
+    path: "{{package_path}}"
+  register: moondeck_folder_initial_check
+    
+- name: "Get Github artifact link for download"
+  github_link:
+    repo: "{{package_repo}}"
+    tag: 'latest'
+  delegate_to: 'localhost'
+  register: 'moondeck_buddy_github'
+  when: moondeck_folder_initial_check.stat.exists == false
+
+- name: "Download {{package_name}}"
+  ansible.windows.win_get_url:
+    url: "{{moondeck_buddy_github.link}}"
+    dest: "{{package_path}}.7z"
+  when: moondeck_folder_initial_check.stat.exists == false
+
+# This module unzip compressed file and move all files one folder up, github always have another folder nested in compressed file
+- name: 'Unzip {{package_name}}'
+  github_unzip:
+    src: '{{package_path}}.7z'
+    dest: '{{package_path}}'
+    delete_archive: true
+    move_up_dir: true
+  when: moondeck_folder_initial_check.stat.exists == false
+
+# Change folder ownership
+- name: "Check if {{package_name}} exists"
+  ansible.windows.win_stat:
+    path: "{{package_path}}"
+  register: moondeck_folder
+
+- name: "Change owner of {{package_name}}"
+  ansible.windows.win_owner:
+    path: "{{package_path}}"
+    user: 4542e
+    recurse: true
+  when: moondeck_folder.stat.exists
+
+- name: Disable ACL inheritance
+  ansible.windows.win_acl_inheritance:
+    path: "{{package_path}}"
+    state: absent
+  when: moondeck_folder.stat.exists
+
+- name: Set ACL owner
+  ansible.windows.win_acl:
+    path: "{{package_path}}"
+    user: 4542e
+    rights: FullControl
+    type: allow
+    state: present 
+    propagation: 'None'
+  when: moondeck_folder.stat.exists
+
+# Create Shortcut if does not exist
+- name: Check {{package_name}}.lnk exists
+  ansible.windows.win_stat:
+    path: "{{package_shortcut}}"
+  register: moondeck_buddy_lnk
+
+- name: Create an application shortcut on start menu
+  community.windows.win_shortcut:
+    src: "{{package_path}}\\bin\\MoonDeckBuddy.exe"
+    dest: "{{package_shortcut}}"
+    icon: "{{package_path}}\\bin\\MoonDeckBuddy.exe,0"
+  when: not moondeck_buddy_lnk.stat.exists

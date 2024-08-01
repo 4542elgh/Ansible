@@ -1,0 +1,11 @@
+---
+  - name: "Check if Antibody plugins list exist, this will also tell if stow worked correctly"
+    stat:
+      path: "{{ lookup('env', 'HOME') + '/.config/zsh/.zsh_plugins.txt' }}"
+    register: var_antibody_config_exist
+
+  - name: "Antibody build plugins"
+    shell: "antibody bundle < ~/.config/zsh/.zsh_plugins.txt > ~/.config/zsh/.zsh_plugins.sh"
+
+  - name: "Change shell to zsh"
+    shell: "{{ 'chsh -s /bin/zsh ' + ansible_user_id }}"

@@ -1,0 +1,22 @@
+---
+- name: Remove Git from context menu
+  ansible.windows.win_regedit:
+    path: "{{ item }}"
+    state: absent
+    delete_key: true
+  loop:
+    - HKCR:\Directory\Background\shell\git_gui
+    - HKCR:\Directory\Background\shell\git_shell
+
+- name: Set old context menu reg keys
+  ansible.windows.win_regedit:
+    path: "{{ item }}"
+  loop: 
+    - HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}
+    - HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32
+
+- name: Set old context menu reg key default value to empty string (this is needed)
+  ansible.windows.win_regedit:
+    path: HKCU:\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32
+    name: ""
+    data: ""

@@ -1,0 +1,57 @@
+---
+mpv_path: 'C:\\ProgramData\\chocolatey\\lib\\mpv.install\\tools'
+
+win_get_packages:
+  - JesseDuffield.lazygit
+  - StartIsBack.StartAllBack
+  - Tencent.WeChat
+  - Tencent.QQ
+  - Sogou.SogouInput
+  - IrfanSkiljan.IrfanView
+  - Olivia.VIA
+
+chocolatey_packages:
+  - vscodium
+  - filezilla
+  - lghub
+  - sunshine
+  - hwinfo
+  - obs-studio
+  - nodejs
+  - epicgameslauncher
+  - git
+  - dotnet-runtime
+  - dotnet-desktopruntime
+  - dotnet-6.0-runtime
+  - dotnet-6.0-desktopruntime
+  - discord
+  - 7zip
+  - python3
+  - mpv
+  - bitwarden
+  - powertoys
+  - obsidian
+  - teamviewer
+  - everything
+  - postman
+  - crystaldiskinfo
+  - ffmpeg
+  - imagemagick
+  - steam
+  - office-tool
+  - blitz.gg
+  - mullvad-app
+  - vmwareworkstation
+  - neovim
+
+smb_shares:
+  - {letter: I, path:  "\\\\192.168.1.31\\iso"}
+  - {letter: J, path:  "\\\\192.168.1.31\\docker"}
+  - {letter: K, path:  "\\\\192.168.1.31\\Dev"}
+  - {letter: L, path:  "\\\\192.168.1.31\\Backup"}
+  - {letter: M, path:  "\\\\192.168.1.31\\Download"}
+  - {letter: N, path:  "\\\\192.168.1.31\\Software"}
+  - {letter: T, path:  "\\\\192.168.1.31\\TeachFeeling"}
+  - {letter: P, path:  "\\\\192.168.1.31\\Photo"}
+  - {letter: Q, path:  "\\\\192.168.1.31\\Video"}
+  - {letter: R, path:  "\\\\192.168.1.31\\TheMoreYouKnow"}

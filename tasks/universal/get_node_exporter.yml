@@ -1,0 +1,70 @@
+---
+  - name: "Check if wget exists"
+    include_role:
+      name: binary_exists
+    vars:
+      binary_name: "wget"
+    register: wget_stat
+
+  - name: Install wget
+    apt:
+      name: "wget"
+      update_cache: true
+    when: ansible_facts.distribution == "Debian"
+
+  - name: Install wget
+    pacman:
+      name: "wget"
+      update_cache: true
+    when: ansible_facts.distribution == "Arch"
+
+  - name: "node_exporter exists"
+    include_role:
+      name: binary_exists
+    vars:
+      binary_name: "node_exporter"
+    register: node_exporter_stat
+
+  - name: "Create prometheus dir for node exporter"
+    ansible.builtin.file:
+      path: /opt/prometheus
+      state: directory
+      mode: '0755'
+    when: not node_exporter_stat.exists
+
+  - name: "Download node exporter for x86"
+    ansible.builtin.shell: curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4 | wget -qi - -O node_exporter.tar.gz
+    become: true
+    when: ansible_architecture == "x86_64" and not node_exporter_stat.exists
+
+  - name: "Download node exporter for ARM"
+    ansible.builtin.shell: curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep browser_download_url | grep linux-arm64 | cut -d '"' -f 4 | wget -qi - -O node_exporter.tar.gz
+    become: true
+    when: ansible_architecture != "x86_64" and not node_exporter_stat.exists
+
+  - name: Setup node exporter
+    block:
+    - name: "Extract and install to /opt/prometheus/node_exporter"
+      ansible.builtin.shell: tar -xvf node_exporter.tar.gz && cd  node_exporter*/ && cp node_exporter /opt/prometheus
+      become: true
+
+    - name: "Remove node_exporter download files and folders"
+      file:
+        path: "{{item}}"
+        state: absent
+      with_fileglob:
+        - /root/node_exporter*
+
+    - name: "Copy nodeexporter service"
+      ansible.builtin.copy:
+        src: /mnt/Exos_MP/Samba/Dev/Linux/Services/nodeexporter.service
+        dest: /etc/systemd/system/nodeexporter.service
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: 'Start nodeexporter'
+      ansible.builtin.systemd:
+        state: started
+        name: nodeexporter
+    when: not node_exporter_stat.exists

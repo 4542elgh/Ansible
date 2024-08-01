@@ -1,0 +1,34 @@
+---
+- name: "Check Discord exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "discord" # Result will store in "zfs_exists"
+  
+- name: "Install Discord"
+  block:
+  - name: Download Discord.deb
+    get_url:
+      url: https://discord.com/api/download?platform=linux&format=deb
+      dest: /tmp/discord.deb
+  - name: Install Discord package
+    apt:
+      deb: /tmp/discord.deb
+  when: not discord_exists
+
+- name: "Check MPV exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "mpv" # Result will store in "zfs_exists"
+
+- name: "Install MPV"
+  block:
+  - name: Add MPV stable repository from PPA
+    apt_repository:
+      repo: ppa:ubuntuhandbook1/mpv
+  - name: Update repositories cache and install "mpv" package
+    apt:
+      name: mpv
+      update_cache: yes
+  when: not mpv_exists

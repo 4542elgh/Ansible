@@ -1,0 +1,13 @@
+---
+# tasks file for samba-zfs-shadow-copy
+  - name: "install zfs-auto-snapshot"
+    apt:
+      name:
+        - zfs-auto-snapshot
+        - samba-vfs-modules
+
+  # Ansible will leave the file along if it exist already
+  - name: "Create crontab files"
+    copy:
+      src: zfs-auto-snapshot_crontab
+      dest: /etc/cron.d/zfs-auto-snapshot

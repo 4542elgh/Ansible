@@ -1,0 +1,38 @@
+---
+- name: "Rust for all"
+  hosts: all
+  tasks:
+  - name: "Install rust"
+    include_role:
+      name: url_install
+    vars:
+      binary_name: "rustup"
+      script_url: "https://sh.rustup.rs"
+
+- name: "Setup Debian based DE"
+  hosts: linux_vm
+  tasks:
+    - name: "Configure dotfiles"
+      include_role:
+        name: get_dotfiles
+
+    - name: "Install docker"
+      include_role:
+        name: url_install
+      vars:
+        binary_name: "docker"
+        script_url: "https://get.docker.com"
+
+    - name: "Install antibody"
+      include_role:
+        name: url_install
+      vars:
+        binary_name: "antibody"
+        script_url: "https://git.io/antibody"
+        
+    # - name: "Install tailscale"
+    #   include_role:
+    #     name: url_install
+    #   vars:
+    #     binary_name: "tailscale"
+    #     script_url: "https://tailscale.com/install.sh"

@@ -1,0 +1,25 @@
+# - name: Copy ungoogled chromium
+#   ansible.windows.win_copy:
+#     src: "{{playbook_dir}}/binary/windows/ungoogled"
+#     dest: "C:\\Program Files\\ungoogled"
+#
+# - name: Ensure that system32 and Powershell are present on the global system path, and in the specified order
+#   ansible.windows.win_path:
+#     elements:
+#     - 'C:\\Program Files\\ungoogled'
+#
+# - name: rename chrome to ungoogled
+#   win_command: "cmd.exe /c ren \"C:\\Program Files\\ungoogled\\chrome.exe\" ungoogled.exe"
+#
+# - name: Check that ungoogled.lnk exists
+#   ansible.windows.win_stat:
+#     path: "C:\\Users\\4542e\\Desktop\\ungoogled.lnk"
+#   register: ungoogled_lnk
+#
+# - name: Create an application shortcut on the desktop
+#   community.windows.win_shortcut:
+#     src: "C:\\Program Files\\ungoogled\\ungoogled.exe"
+#     dest: C:\Users\4542e\Desktop\ungoogled.lnk
+#     icon:  "C:\\Program Files\\ungoogled\\ungoogled.exe,0"
+#   when: not ungoogled_lnk.stat.exists
+#

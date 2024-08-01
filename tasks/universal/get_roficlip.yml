@@ -1,0 +1,27 @@
+---
+- name: "Check roficlip exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "roficlip" # Result will store in "zfs_exists"
+  register: roficlip_stat
+
+- name: "Get roficlip"
+  block:
+  - name: "Get roficlip script"
+    get_url:
+      url: "https://github.com/4542elgh/roficlip/blob/master/roficlip"
+      dest: "/tmp/roficlip"
+
+  - name: "Move roficlip to /usr/bin"
+    copy:
+      src: "/tmp/roficlip"
+      dest: "/usr/bin/roficlip"
+    become: true
+
+  - name: "Change roficlip script ownership"
+    file:
+      path: "/usr/bin/roficlip"
+      mode: "a+x"
+    become: true
+  when: not roficlip_stat.exists

@@ -1,0 +1,20 @@
+---
+- name: Install winget
+  ansible.windows.win_command:
+    cmd: 'winget install -e --id {{ item }} --accept-package-agreements'
+  loop: win_get_packages
+
+- name: Install chocolatey
+  win_chocolatey:
+    name: "{{ item }}"
+    state: present 
+  loop: chocolatey_packages
+
+- name: Copy mpv config
+  ansible.windows.win_copy:
+    src: "{{playbook_dir}}/config/cross_platform/mpv"
+    dest: C:\Users\4542e\AppData\Roaming
+
+- name: Map smb drives
+  include_tasks:
+    file: "tasks/Windows/map_smb_drives.yml"

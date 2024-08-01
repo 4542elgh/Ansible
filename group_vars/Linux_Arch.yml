@@ -1,0 +1,65 @@
+---
+pacman_cli_packages:
+  - base-devel
+  - git
+  - gawk
+  - xclip
+  - the_silver_searcher
+  - feh
+  - openssh
+  - cmake
+  - gcc
+  - fontconfig
+  - man-db
+  - man-pages
+  - xorg-server
+  - xorg-xinit
+  - alacritty
+  - wget
+  - rsync
+  - neovim
+  - imagemagick
+  - zsh
+  - w3m
+  - docker
+
+pacman_gui_packages:
+  - adobe-source-han-sans-cn-fonts 
+  - adobe-source-han-sans-tw-fonts
+  - noto-fonts
+  - noto-fonts-cjk
+  - ttf-droid
+  - fcitx
+  - fcitx-sunpinyin
+  
+pacman_DE_packages:
+  - i3-gaps
+  - picom
+
+yay_cli_packages:
+  - stow
+  - neofetch
+  - bat
+  - autojump
+  - tmux
+  - fzf
+  - ripgrep
+  - lsd
+  - mupdf
+  - gotop
+  - ranger
+
+yay_gui_packages:
+  - nerd-fonts-dejavu-complete
+  - noto-fonts-emoji
+  - ttf-joypixels
+
+yay_DE_packages:
+  - i3lock-color
+  - xidlehook
+  - rofi
+  - clipster
+
+start_services:
+  - sshd
+  - docker

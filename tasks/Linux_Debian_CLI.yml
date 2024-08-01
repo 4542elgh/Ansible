@@ -1,0 +1,13 @@
+---
+- name: Install apt package
+  apt:
+    name: "{{apt_cli_packages}}"
+    update_cache: true
+  become: true
+
+- name: "Make sure services are running"
+  systemd:
+    name: "{{item}}"
+    state: started
+    enabled: true
+  loop: "{{start_services}}"

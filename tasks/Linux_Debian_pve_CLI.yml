@@ -1,0 +1,13 @@
+---
+- name: Install apt package
+  apt:
+    name: "{{apt_cli_packages}}"
+    update_cache: true
+  become: true
+
+- name: "Make sure sshd is running"
+  systemd:
+    state: started
+    enabled: true
+    name: sshd
+  become: true

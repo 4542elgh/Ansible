@@ -1,0 +1,26 @@
+---
+- name: "Chinese simplified, traditional, japanese, korean and unicode font"
+  pacman:
+    name: pacman_gui_packages
+    state: present
+
+- name: "install nerdfont and emoji font"
+  yay:
+    name: pacman_gui_packages
+    state: present
+
+# You might need to disable your current compositor if you are using a derived version of arch, (use vanilla i3 get around this issue)
+# You will also need to run picom with sudo for compositor to work
+- name: "Desktop environment I3"
+  pacman:
+    name: pacman_DE_packages
+    state: present
+
+- name: "Desktop environment I3 lock"
+  yay:
+    name: yay_DE_packages
+    state: present
+
+- name: "Get roficlip"
+  include_tasks:
+    file: "Linux_Arch/get_roficlip.yml"

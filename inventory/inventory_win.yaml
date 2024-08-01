@@ -1,0 +1,7 @@
+windows:
+  hosts:
+    192.168.1.16:
+  vars:
+    ansible_connection: ssh
+    ansible_shell_type: powershell 
+    ansible_user: 4542e

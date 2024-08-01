@@ -1,0 +1,25 @@
+---
+apt_cli_packages:
+  - stow
+  - zsh
+  - neovim
+  - imagemagick
+  - neofetch
+  - bat
+  - autojump
+  - tmux
+  - fzf
+  - ripgrep
+  - lsd
+  - mupdf
+  - gotop
+  - silversearcher-ag
+  - openssh-server
+  - rsync
+  - ranger
+  - w3m
+  - wget
+
+home_dir: "/root"
+dotfiles_repo_name: "Dotfiles"
+dotfiles_repo_link: "https://github.com/4542elgh/Dotfiles_Ansible"

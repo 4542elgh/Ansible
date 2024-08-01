@@ -1,0 +1,29 @@
+---
+  # As long as variable name stay same, child role will see parent vars
+  - name: "Check {{binary_name}} exists"
+    include_role:
+      name: binary_exists
+
+  - name: "Install {{binary_name}}"
+    block:
+    - name: 'Get {{binary_name}}'
+      uri:
+        url: "{{script_url}}"
+        method: 'GET'
+        dest: "/tmp/get-{{binary_name}}.sh"
+        follow_redirects: safe
+        status_code: [200,304]
+
+    - name: "Change {{binary_name}} script ownership"
+      file:
+        path: "/tmp/get-{{binary_name}}.sh"
+        mode: "a+x"
+
+    - name: 'Install {{binary_name}}'
+      shell: 'sh /tmp/get-{{binary_name}}.sh'
+
+    - name: 'Remove get-{{binary_name}}.sh'
+      file:
+        path: '/tmp/get-{{binary_name}}.sh'
+        state: absent
+    when: not binary_exists_result.exists

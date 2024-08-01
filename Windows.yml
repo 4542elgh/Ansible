@@ -1,0 +1,8 @@
+---
+- name: "Setup Debian based DE"
+  hosts: linux_vm
+  tasks:
+    - name: "Include vars"
+      include_vars:
+        file: "group_vars/{{system_identifier}}.yml"
+        file: "auth/smb_auth.yml"

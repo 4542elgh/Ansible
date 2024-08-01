@@ -1,0 +1,29 @@
+---
+- name: "Check stow exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "stow"
+
+- name: "Check if repo exists at {{home_dir}}/{{dotfiles_repo_name}}"
+  stat:
+    # path: "{{ lookup('env', 'HOME') + '/Dotfiles' }}"
+    path: "{{home_dir}}/{{dotfiles_repo_name}}"
+  register: dotfiles_exists
+
+- name: "Deploy with stow"
+  block: 
+  - name: "Set dotfiles path to: {{home_dir}}/{{dotfiles_repo_name}}"
+    set_fact:
+      dotfiles_path: "{{home_dir}}/{{dotfiles_repo_name}}"
+  - name: "Clone from {{dotfiles_repo_link}}"
+    git:
+      repo: "{{dotfiles_repo_link}}"
+      dest: "{{dotfiles_path}}"
+      version: "master"
+      update: "no"
+  - name: "Stowing config folder"
+    shell: 
+      cmd: "stow config"
+      chdir: "{{dotfiles_path}}"
+  when: stow_exists and not dotfiles_exists.stat.exists
