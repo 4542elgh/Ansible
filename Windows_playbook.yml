@@ -5,4 +5,7 @@
     - name: "Include vars"
       include_vars:
         file: "group_vars/{{system_identifier}}.yml"
+
+    - name: "Include smb auth"
+      include_vars:
         file: "auth/smb_auth.yml"

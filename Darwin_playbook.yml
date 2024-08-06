@@ -1,0 +1,11 @@
+---
+- name: "Setup Debian based DE"
+  hosts: macos
+  tasks:
+    - name: "Set system identifier"
+      set_fact:
+        system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}_{{ansible_facts.hostname}}"
+
+    - name: test
+      debug:
+        var: system_identifier
