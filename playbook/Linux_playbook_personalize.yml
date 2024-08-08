@@ -1,4 +1,3 @@
----
 - name: "Setup Debian based DE"
   hosts: linux_vm
   tasks:
@@ -14,20 +13,20 @@
       include_tasks:
         file: "tasks/{{system_identifier}}_CLI.yml"
 
-    - name: "Install docker"
-      include_tasks:
-        file: "tasks/{{system_identifier}}/get_docker.yml"
+    # - name: "Install docker"
+    #   include_tasks:
+    #     file: "tasks/{{system_identifier}}/get_docker.yml"
 
-    # - name: "Configure dotfiles"
-    #   include_role:
-    #     name: get_dotfiles
+    - name: "Configure dotfiles"
+      include_role:
+        name: get_dotfiles
 
-    # - name: "Install antibody"
-    #   include_role:
-    #     name: url_install
-    #   vars:
-    #     binary_name: "antibody"
-    #     script_url: "https://git.io/antibody"
+    - name: "Install antibody"
+      include_role:
+        name: url_install
+      vars:
+        binary_name: "antibody"
+        script_url: "https://git.io/antibody"
         
     # - name: "Install tailscale"
     #   include_role:
