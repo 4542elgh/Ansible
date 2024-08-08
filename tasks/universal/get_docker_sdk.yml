@@ -1,0 +1,4 @@
+---
+- name: Install docker sdk python package
+  ansible.builtin.pip:
+    name: docker
