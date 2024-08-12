@@ -1,7 +1,7 @@
 all:
   children:
-      macbook_pro:
-        hosts:
-          192.168.1.18:
-        vars:
-          ansible_user: evanliu
+    macbook_pro:
+      hosts:
+        192.168.1.18:
+      vars:
+        ansible_user: evanliu
