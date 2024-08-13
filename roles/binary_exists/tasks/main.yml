@@ -5,9 +5,8 @@
   failed_when: binary_exists.rc not in [0,1]
   register: binary_exists
   
-# Result will store in "{{binary_name}}_exists"
-- name: Set fact
+- name: "Set fact"
   set_fact:
-    binary_exists_result:
+    stat:
       name: "{{binary_name}}"
       exists : "{{binary_exists.rc == 0}}"

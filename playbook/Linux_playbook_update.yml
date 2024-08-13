@@ -1,16 +1,28 @@
 ---
-- name: "Update system"
-  hosts: "all"
+- name: "Remove extra containers and volumes from docker"
+  hosts: "vm"
   tasks:
-  - name: "Update system Debian based"
-    block:
-    - name: Update the apt package index
+    - name: "Check docker exists"
+      include_role:
+        name: binary_exists
+      vars:
+        binary_name: "docker"
+    - name: "Register variable"
+      set_fact:
+        docker_stat: "{{stat}}"
+
+    - name: Install python3-docker package
       apt:
-        update_cache: yes
-        cache_valid_time: 3600  # Update the cache if it's older than 1 hour
-    - name: Perform dist-upgrade
-      apt:
-        upgrade: dist
-        autoremove: yes  # Optional: remove obsolete packages
-        autoclean: yes   # Optional: clean up the package cache
-    when: ansible_pkg_mgr is defined and ansible_pkg_mgr == "apt"
+        name: python3-docker
+        update_cache: true
+
+    - name: "Clean up docker"
+      block:
+      - name: "Docker system prune"
+        community.docker.docker_prune:
+          containers: true
+          images: true
+          networks: true
+          volumes: true
+          builder_cache: true
+      when: docker_stat.exists

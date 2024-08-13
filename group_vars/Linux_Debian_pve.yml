@@ -17,6 +17,7 @@ apt_cli_packages:
   - ranger
   - w3m
   - wget
+  - pip
 
 home_dir: "/root"
 dotfiles_repo_name: "Dotfiles"

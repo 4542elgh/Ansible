@@ -1,0 +1,17 @@
+---
+- name: "Check {{ package_name }} in pip"
+  shell: "python3 -m pip show {{ package_name }}"
+  changed_when: false
+  failed_when: pip_exists.rc not in [0,1]
+  register: pip_exists
+
+- name: "Check {{ package_name }} in apt"
+  shell: "dpkg -l python3-{{ package_name }}"
+  register: apt_exists
+  ignore_errors: yes
+
+- name: "Set fact"
+  set_fact:
+    stat:
+      name: "{{ package_name }}"
+      exists : "{{pip_exists.rc == 0 or apt_exists.rc == 0}}"
