@@ -1,0 +1,24 @@
+---
+- name: "Update system Debian based"
+  block:
+  - name: Update the apt package index
+    apt:
+      update_cache: yes
+      cache_valid_time: 3600
+  - name: Perform dist-upgrade
+    apt:
+      upgrade: dist
+      autoremove: yes
+      autoclean: yes
+  when: ansible_pkg_mgr is defined and ansible_pkg_mgr == "apt"
+
+- name: "Update system Darwin (MacOSX) based"
+  block:
+  - name: "Display message"
+    debug:
+      msg: "This operation will likely take a while"
+  - name: Update homebrew packages
+    community.general.homebrew:
+      update_homebrew: true
+      upgrade_all: true
+  when: ansible_pkg_mgr is defined and ansible_pkg_mgr == "homebrew"

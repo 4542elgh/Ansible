@@ -1,6 +1,6 @@
 ---
 - name: "Setup Debian based DE"
-  hosts: linux_vm
+  hosts: vm
   tasks:
     - name: "Set system identifier"
       set_fact:
@@ -17,21 +17,3 @@
     - name: "Install docker"
       include_tasks:
         file: "tasks/{{system_identifier}}/get_docker.yml"
-
-    # - name: "Configure dotfiles"
-    #   include_role:
-    #     name: get_dotfiles
-
-    # - name: "Install antibody"
-    #   include_role:
-    #     name: url_install
-    #   vars:
-    #     binary_name: "antibody"
-    #     script_url: "https://git.io/antibody"
-        
-    # - name: "Install tailscale"
-    #   include_role:
-    #     name: url_install
-    #   vars:
-    #     binary_name: "tailscale"
-    #     script_url: "https://tailscale.com/install.sh"
