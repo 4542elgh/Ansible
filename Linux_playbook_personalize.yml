@@ -23,7 +23,7 @@
 
     - name: "Install antibody"
       include_role:
-        name: url_install
+        name: url_install_shell_script
       vars:
         binary_name: "antibody"
         script_url: "https://git.io/antibody"

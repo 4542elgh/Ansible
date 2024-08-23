@@ -1,0 +1,53 @@
+---
+- name: Check if Node-Red repo is already cloned
+  stat:
+    path: "{{node_red.dir}}"
+  register: local_repo
+
+- name: Install Node-Red
+  block:
+  - name: "Install git and and npm"
+    apt:
+      pkg: "{{node_red.dependencies.apt}}"
+
+  - name: Install "grunt-cli" package globally.
+    community.general.npm:
+      name:  "{{item}}"
+      global: true
+    loop: "{{node_red.dependencies.npm}}"
+
+  - name: Clone Node-Red repo
+    git:
+      repo: "{{node_red.repo}}"
+      dest: "{{node_red.dir}}"
+      clone: true
+      update: true
+
+  - name: Install package.json
+    community.general.npm:
+      path: "{{node_red.dir}}"
+
+  - name: Building with Grunt
+    shell: grunt build
+    args:
+      chdir: "{{node_red.dir}}"
+  when: not local_repo.stat.isdir
+
+- name: Get stats of the Node-Red service file
+  stat:
+    path: "/etc/systemd/system/{{node_red.service_name}}.service"
+  register: service_file
+  
+- name: Create service file and start service
+  block:
+  - name: write hostname using jinja2
+    template:
+      src: services/nodered/nodered.j2
+      dest: "/etc/systemd/system/{{node_red.service_name}}.service"
+
+  - name: Enable and start Node-Red service
+    systemd_service:
+      name: "{{node_red.service_name}}"
+      enabled: true
+      state: started
+  when: not service_file.stat.exists

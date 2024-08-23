@@ -12,7 +12,7 @@ apt_cli_packages:
   - ripgrep
   - lsd
   - mupdf
-  - gotop
+  - htop
   - silversearcher-ag
   - openssh-server
   - rsync
@@ -21,6 +21,20 @@ apt_cli_packages:
   - wget
   - pip
 
+start_services:
+  - sshd
+
 home_dir: "/root"
 dotfiles_repo_name: "Dotfiles"
 dotfiles_repo_link: "https://github.com/4542elgh/Dotfiles_Ansible"
+
+node_red:
+  repo: "https://github.com/node-red/node-red.git"
+  dir: "/root/node-red"
+  service_name: "nodered"
+  dependencies:
+    apt:
+      - git
+      - npm
+    npm:
+      - grunt-cli

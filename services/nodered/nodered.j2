@@ -1,0 +1,13 @@
+[Unit]
+Description=Start Node-Red service. This should run on boot.
+Documentation=https://nodered.org/docs/getting-started/development
+After=network-online.target
+
+[Service]
+User=root
+Restart=on-failure
+WorkingDirectory={{node_red_dir}}
+ExecStart=npm start
+
+[Install]
+WantedBy=multi-user.target

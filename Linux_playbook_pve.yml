@@ -4,7 +4,7 @@
   tasks:
   - name: "Install rust"
     include_role:
-      name: url_install
+      name: url_install_shell_script
     vars:
       binary_name: "rustup"
       script_url: "https://sh.rustup.rs"
