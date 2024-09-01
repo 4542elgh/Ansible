@@ -4,6 +4,7 @@
     name: binary_exists
   vars:
     binary_name: "docker"
+
 - name: "Register variable"
   set_fact:
     docker_stat: "{{stat}}"

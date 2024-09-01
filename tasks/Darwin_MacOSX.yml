@@ -1,0 +1,19 @@
+---
+- name: "Get Brew"
+  include_tasks:
+    file: "Darwin_MacOSX/get_homebrew.yml"
+
+- name: Copy Brewfile to remote
+  ansible.builtin.copy:
+    src: ./tasks/Darwin_MacOSX/Brewfile
+    dest: /Users/evanliu/Brewfile
+    owner: evanliu
+    group: staff
+    mode: '0766'
+
+- name: "Show message"
+  debug:
+    msg: "Installing from /Users/evanliu/Brewfile, this might take some time"
+
+- name: "Install from Brewfile"
+  shell: "brew bundle install"

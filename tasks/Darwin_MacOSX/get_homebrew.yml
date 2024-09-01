@@ -1,0 +1,21 @@
+---
+- name: "Check brew exists"
+  include_role:
+    name: binary_exists
+  vars:
+    binary_name: "brew"
+  register: brew_stat
+
+- name: "Register variable"
+  set_fact:
+    brew_stat: "{{stat}}"
+
+- name: "Install brew"
+  block:
+    - name: "Get brew"
+      include_role:
+        name: url_install_shell_script
+      vars:
+        binary_name: "brew"
+        script_url: "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+  when: not brew_stat.exists

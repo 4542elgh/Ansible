@@ -1,7 +1,12 @@
 ---
-- name: "Setup Debian based DE"
-  hosts: macos
+- name: "Setup MacOSX"
+  hosts: macbook_pro
   tasks:
     - name: "Set system identifier"
       set_fact:
         system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}_{{ansible_facts.hostname}}"
+
+    - name: "Install Brew and apps from Brew file"
+      include_tasks:
+        file: "tasks/Darwin_MacOSX.yml"
+
