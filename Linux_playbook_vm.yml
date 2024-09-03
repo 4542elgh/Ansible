@@ -1,27 +1,50 @@
 ---
-- name: "Setup Debian based DE"
-  hosts: vm
-  tasks:
-    - name: "Set system identifier"
-      set_fact:
-        system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}_vm"
+# - name: "Setup Debian based DE"
+#   hosts: vm
+#   tasks:
+#     - name: "Set system identifier"
+#       set_fact:
+#         system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}_vm"
 
-    - name: "Include vars"
-      include_vars:
-        file: "group_vars/{{system_identifier}}.yml"
+#     - name: "Include vars"
+#       include_vars:
+#         file: "group_vars/{{system_identifier}}.yml"
+
+#     - name: "System update"
+#       include_role:
+#         name: get_pkg_update
+
+#     - name: "Install CLI app based on OS"
+#       include_tasks:
+#         file: "tasks/{{system_identifier}}_CLI.yml"
+
+#     - name: "Install docker"
+#       include_tasks:
+#         file: "tasks/{{system_identifier}}/get_docker.yml"
+
+#     - name: "Install NodeRed"
+#       include_tasks:
+#         file: "tasks/universal/get_nodered.yml"
+
+- name: "Setup Debian based DE"
+  hosts: raspberrypi
+  tasks:
+    # - name: "Set system identifier"
+    #   set_fact:
+    #     system_identifier: "{{ansible_facts.system}}_{{ansible_facts.distribution}}_vm"
+
+    # - name: "Include vars"
+    #   include_vars:
+    #     file: "group_vars/{{system_identifier}}.yml"
 
     - name: "System update"
       include_role:
         name: get_pkg_update
 
-    - name: "Install CLI app based on OS"
-      include_tasks:
-        file: "tasks/{{system_identifier}}_CLI.yml"
+    # - name: "Install CLI app based on OS"
+    #   include_tasks:
+    #     file: "tasks/{{system_identifier}}_CLI.yml"
 
-    - name: "Install docker"
-      include_tasks:
-        file: "tasks/{{system_identifier}}/get_docker.yml"
-
-    - name: "Install NodeRed"
-      include_tasks:
-        file: "tasks/universal/get_nodered.yml"
+    # - name: "Install CLI app based on OS"
+    #   include_tasks:
+    #     file: "tasks/universal/get_motioneye.yml"

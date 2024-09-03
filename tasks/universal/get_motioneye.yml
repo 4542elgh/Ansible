@@ -1,0 +1,6 @@
+---
+- name: Install motioneye package
+  shell: "python3 -m pip install --pre motioneye --break-system-packages"
+
+- name: Init motioneye
+  shell: "motioneye_init"
